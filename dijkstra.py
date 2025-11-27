@@ -1,6 +1,6 @@
-import heapq
 from typing import Dict, List, Optional
 from graph import VillageGraph
+from heapqueue import MinHeap, heappush, heappop
 
 
 class DijkstraResult:
@@ -24,12 +24,13 @@ class DijkstraAlgorithm:
             v: None for v in self.graph.get_all_villages()
         }
 
-        pq = [(0, start)]
+        pq = MinHeap()
+        heappush(pq, (0, start))
 
         visited = set()
 
         while pq:
-            current_dist, current = heapq.heappop(pq)
+            current_dist, current = heappop(pq)
 
             if current in visited:
                 continue
@@ -48,7 +49,7 @@ class DijkstraAlgorithm:
                 if distance < distances[neighbor]:
                     distances[neighbor] = distance
                     parent[neighbor] = current
-                    heapq.heappush(pq, (distance, neighbor))
+                    heappush(pq, (distance, neighbor))
 
         if distances[end] == float("infinity"):
             return DijkstraResult(0, [], success=False)
